@@ -6,6 +6,7 @@ import multer from 'multer'
 import path from 'path'
 const app = express();
 app.use(express.static('Files'))
+app.use(express.static('cluster'))
 // Middleware
 app.use(cors());
 app.use(express.json());
