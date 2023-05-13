@@ -87,10 +87,30 @@ app.post('/ClusterFromImage', upload.single('file'), (req, res) => {
     res.json({ error })
   }
 });
+app.get('/asteroidDetector', (req, res) => {
+  try {
+    const pythonProcess = spawn('python', ['Python/asteroidDetector.py']);
+    let result = '';
+    pythonProcess.stdout.on('data', (data) => {
+        // console.log(`Python script stdout: ${data}`);
+      result += data.toString();
+    });
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`Python script stderr: ${data}`);
+    });
+    pythonProcess.on('close', (code) => {
+      console.log(`Python script process exited with code ${code}`);
+      res.json({ resultPath:result });
+    })
+  } catch (error) {
+    console.log(error);
+    res.json({ error })
+  }
+});
 
 
 // Start the server
-const port = process.env.PORT || 8002;
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
